@@ -12,7 +12,7 @@ services:
     image: herrj/docker-bitcoin-server
     ports:
       - "8080:8080"
-    container_name: bitcoin
+    container_name: docker-bitcoin-server
     volumes:
       - "{on-device-storage-location}:/bitcoin/.bitcoin"
 ```
