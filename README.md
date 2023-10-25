@@ -17,6 +17,9 @@ services:
       - "{on-device-storage-location}:/bitcoin/.bitcoin"
 ```
 
+# Docker Hub
+See the image details here: https://hub.docker.com/repository/docker/herrj/docker-bitcoin-server/general
+
 # Build
 Before building the image, you need to build the frontend separateley. In the directory `dockerbitcoinfrontend` run
 ``` bash
