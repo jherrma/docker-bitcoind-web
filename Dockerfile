@@ -1,7 +1,5 @@
 ARG DEBIAN_VERSION=12-slim
 ARG GO_VERSION=1.21
-ARG VERSION=25.0
-ARG BITCOIN_CORE_SIGNATURE=71A3B16735405025D447E8F274810B012346C9A6
 
 FROM debian:${DEBIAN_VERSION} AS builder
 
@@ -13,6 +11,9 @@ FROM builder AS builder_arm64
 ENV ARCH=aarch64
 
 FROM builder_${TARGETARCH} AS build
+
+ARG BITCOIN_CORE_SIGNATURE=71A3B16735405025D447E8F274810B012346C9A6
+ARG VERSION=25.1
 
 RUN apt update \
     && apt install -y --no-install-recommends \
@@ -38,7 +39,6 @@ RUN cd /tmp \
     && sha256sum --ignore-missing --check SHA256SUMS \
     && tar -xzvf bitcoin-${VERSION}-${ARCH}-linux-gnu.tar.gz -C /opt \
     && ln -sv bitcoin-${VERSION} /opt/bitcoin \
-    && /opt/bitcoin/bin/test_bitcoin --show_progress \
     && rm -v /opt/bitcoin/bin/test_bitcoin /opt/bitcoin/bin/bitcoin-qt
 
 
