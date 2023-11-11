@@ -14,6 +14,7 @@ import (
 )
 
 type BitcoinConfig struct {
+	RootDirectory string
 	ConfPath      string
 	ServerHost    string
 	ServerPort    int64
@@ -25,8 +26,9 @@ type BitcoinConfig struct {
 }
 
 const (
-	letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	bitcoinPath = ".bitcoin/bitcoin.conf"
+	letterBytes      = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	bitcoinDirectory = ".bitcoin"
+	configFile       = "bitcoin.conf"
 )
 
 func InitBitcoinConfig() (*BitcoinConfig, error) {
@@ -35,10 +37,11 @@ func InitBitcoinConfig() (*BitcoinConfig, error) {
 		return nil, fmt.Errorf("could not get user home directory")
 	}
 
-	pathToConfig := path.Join(homedir, bitcoinPath)
+	pathToConfig := path.Join(homedir, bitcoinDirectory, configFile)
 	log.Println(pathToConfig)
 
 	config := &BitcoinConfig{
+		RootDirectory: path.Join(homedir, bitcoinDirectory),
 		ConfPath:      pathToConfig,
 		ServerHost:    "127.0.0.1",
 		ServerPort:    8332,

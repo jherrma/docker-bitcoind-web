@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -9,8 +11,11 @@ import (
 )
 
 type ApiController struct {
-	btcd *bitcoind.Bitcoind
+	btcd   *bitcoind.Bitcoind
+	config *BitcoinConfig
 }
+
+const debugFileName = "debug.log"
 
 func NewApiController(config *BitcoinConfig) (*ApiController, error) {
 	btcd, err := bitcoind.New(config.ServerHost, int(config.ServerPort), config.User, config.Password, false, 10)
@@ -19,15 +24,31 @@ func NewApiController(config *BitcoinConfig) (*ApiController, error) {
 	}
 
 	return &ApiController{
-		btcd: btcd,
+		btcd:   btcd,
+		config: config,
 	}, nil
 }
 
-func (a *ApiController) Stop() {
+func (a *ApiController) Stop() error {
 	a.btcd.Stop()
-	// sleep 3 seconds since the stop method is a non-blocking call
-	// until fully shutdown
-	time.Sleep(time.Second * 3)
+
+	debugFilePath := path.Join(a.config.RootDirectory, debugFileName)
+	file, err := os.Stat(debugFilePath)
+	if err != nil {
+		return err
+	}
+
+	lastModifiedOn := file.ModTime()
+	checkInterval := time.Duration(time.Second * 3)
+
+	for {
+		currentTime := time.Now()
+		if currentTime.Sub(lastModifiedOn) > checkInterval {
+			return nil
+		}
+
+		time.Sleep(time.Second * 1)
+	}
 }
 
 func (a *ApiController) GetCollectedInfo(c *fiber.Ctx) error {
