@@ -9,7 +9,7 @@ version: "3"
 
 services:
   bitcoin:
-    image: herrj/docker-bitcoin-server
+    image: herrj/docker-bitcoin-server:latest
     ports:
       - "8080:8080"
     container_name: docker-bitcoin-server
