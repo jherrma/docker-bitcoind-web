@@ -4,10 +4,8 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"log"
 	"math/rand"
 	"os"
-	"os/exec"
 	"path"
 	"strconv"
 	"strings"
@@ -38,7 +36,6 @@ func InitBitcoinConfig() (*BitcoinConfig, error) {
 	}
 
 	pathToConfig := path.Join(homedir, bitcoinDirectory, configFile)
-	log.Println(pathToConfig)
 
 	config := &BitcoinConfig{
 		RootDirectory: path.Join(homedir, bitcoinDirectory),
@@ -72,13 +69,6 @@ func InitBitcoinConfig() (*BitcoinConfig, error) {
 	}
 
 	return config, nil
-}
-
-func StartBitcoinDaemon(config *BitcoinConfig) error {
-	confArg := fmt.Sprintf("-conf=%s", config.ConfPath)
-	cmd := exec.Command("bitcoind", confArg)
-	_, err := cmd.Output()
-	return err
 }
 
 func generatePassword() string {

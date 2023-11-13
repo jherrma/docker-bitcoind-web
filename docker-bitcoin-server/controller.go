@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"log"
+	"os/exec"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -29,25 +31,33 @@ func NewApiController(config *BitcoinConfig) (*ApiController, error) {
 	}, nil
 }
 
+func (a *ApiController) Start() error {
+	confArg := fmt.Sprintf("-conf=%s", a.config.ConfPath)
+	cmd := exec.Command("bitcoind", confArg)
+	_, err := cmd.Output()
+	return err
+}
+
 func (a *ApiController) Stop() error {
 	a.btcd.Stop()
 
-	debugFilePath := path.Join(a.config.RootDirectory, debugFileName)
-	file, err := os.Stat(debugFilePath)
-	if err != nil {
-		return err
-	}
-
-	lastModifiedOn := file.ModTime()
-	checkInterval := time.Duration(time.Second * 3)
+	debugLogFilePath := path.Join(a.config.RootDirectory, debugFileName)
 
 	for {
-		currentTime := time.Now()
-		if currentTime.Sub(lastModifiedOn) > checkInterval {
-			return nil
+		time.Sleep(time.Second * 1)
+
+		cmd := exec.Command("tail", debugLogFilePath)
+		outputBytes, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Println(err)
+			return err
 		}
 
-		time.Sleep(time.Second * 1)
+		output := string(outputBytes)
+		log.Println(output)
+		if strings.Contains(output, "Shutdown: done") {
+			return nil
+		}
 	}
 }
 

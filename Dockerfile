@@ -23,13 +23,6 @@ RUN apt update \
     wget \
     && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
-
-# Don't use base image's bitcoin package for a few reasons:
-# 1. Would need to use ppa/latest repo for the latest release.
-# 2. Some package generates /etc/bitcoin.conf on install and that's dangerous to bake in with Docker Hub.
-# 3. Verifying pkg signature from main website should inspire confidence and reduce chance of surprises.
-# Instead fetch, verify, and extract to Docker image
 RUN cd /tmp \
     && gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys ${BITCOIN_CORE_SIGNATURE} \
     && wget https://bitcoincore.org/bin/bitcoin-core-${VERSION}/SHA256SUMS.asc \
@@ -73,7 +66,7 @@ RUN apt update \
 
 COPY --from=server /bitcoin/docker-bitcoin-webserver /bitcoin/docker-bitcoin-webserver
 
-# Frontend needs to be compiled locally before
+# Frontend needs to be compiled locally before running docker build
 COPY dockerbitcoinfrontend/build/web /bitcoin/frontend
 
 ENTRYPOINT ["/bitcoin/docker-bitcoin-webserver"]

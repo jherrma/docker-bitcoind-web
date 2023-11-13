@@ -16,14 +16,14 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	err = StartBitcoinDaemon(config)
+	apiController, err := NewApiController(config)
 	if err != nil {
-		log.Println("Something went wrong starting the bitcoin daemon")
 		log.Fatalln(err)
 	}
 
-	apiController, err := NewApiController(config)
+	err = apiController.Start()
 	if err != nil {
+		log.Println("Something went wrong starting the bitcoin daemon")
 		log.Fatalln(err)
 	}
 
@@ -47,8 +47,14 @@ func handleSystemSignals(app *fiber.App, apiController *ApiController) {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	go func() {
 		for range sigs {
-			apiController.Stop()
-			app.Shutdown()
+			err := apiController.Stop()
+			if err != nil {
+				log.Println(err)
+			}
+			err = app.Shutdown()
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}()
 }
