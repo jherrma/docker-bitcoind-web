@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/gofiber/fiber/v2 v2.49.2
-	github.com/jon-ryan/go-bitcoind v1.2.0
+	github.com/jon-ryan/go-bitcoind v1.2.1
 )
 
 require (

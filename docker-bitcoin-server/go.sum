@@ -24,6 +24,8 @@ github.com/jon-ryan/go-bitcoind v1.1.5 h1:Jc1rwPzOBi7waNSOqsS5S1mJM1wgB7AxlHYBun
 github.com/jon-ryan/go-bitcoind v1.1.5/go.mod h1:xw4Wy7f03Uxd7+ha2FjabePdFiW47Bk4mNr1oetd6s4=
 github.com/jon-ryan/go-bitcoind v1.2.0 h1:4hFGy3iPzfGykcboM+qViSLcGMeOpKAq+fpyrK2n75I=
 github.com/jon-ryan/go-bitcoind v1.2.0/go.mod h1:xw4Wy7f03Uxd7+ha2FjabePdFiW47Bk4mNr1oetd6s4=
+github.com/jon-ryan/go-bitcoind v1.2.1 h1:wmR2IOP1z5vd7zMZjbHDKyS/uJSu3WKv6PpWetFF7J8=
+github.com/jon-ryan/go-bitcoind v1.2.1/go.mod h1:xw4Wy7f03Uxd7+ha2FjabePdFiW47Bk4mNr1oetd6s4=
 github.com/klauspost/compress v1.16.7 h1:2mk3MPGNzKyxErAw8YaohYh69+pa4sIQSC0fPGCFR9I=
 github.com/klauspost/compress v1.16.7/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
