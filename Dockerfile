@@ -13,7 +13,7 @@ ENV ARCH=aarch64
 FROM builder_${TARGETARCH} AS build
 
 ARG BITCOIN_CORE_SIGNATURE=71A3B16735405025D447E8F274810B012346C9A6
-ARG VERSION=25.1
+ARG VERSION=26.0
 
 RUN apt update \
     && apt install -y --no-install-recommends \
