@@ -44,12 +44,13 @@ class _RootState extends State<Root> {
       verificationProgress: 0,
       connectionsIncoming: 0,
       connectionsOutgoing: 0,
-      gigaHashesPerSecond: 0,
+      txInMemPool: 0,
       uptime: 0,
       version: "-",
       chain: "-");
 
   Timer? timer;
+  bool fetchingBitcoinData = false;
   bool isError = false;
   String errorMessage = "";
 
@@ -61,7 +62,7 @@ class _RootState extends State<Root> {
       verificationProgress: 0,
       connectionsIncoming: 0,
       connectionsOutgoing: 0,
-      gigaHashesPerSecond: 0,
+      txInMemPool: 0,
       uptime: 0,
       version: "-",
       chain: "-");
@@ -84,6 +85,12 @@ class _RootState extends State<Root> {
     timer?.cancel();
 
     timer = Timer.periodic(Duration(seconds: delaySeconds), (timer) async {
+      // in case, the fetching takes longer than the interval
+      if (fetchingBitcoinData) {
+        return;
+      }
+      fetchingBitcoinData = true;
+
       var result = await DataFetching.getBitcoinData();
 
       setState(() {
@@ -91,6 +98,8 @@ class _RootState extends State<Root> {
         errorMessage = result.errorMessage;
         bitcoinData = result.bitcoinData ?? defaultBitcoinData;
       });
+
+      fetchingBitcoinData = false;
     });
   }
 

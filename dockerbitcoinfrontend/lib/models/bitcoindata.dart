@@ -6,7 +6,7 @@ class BitcoinData {
   double verificationProgress;
   int connectionsIncoming;
   int connectionsOutgoing;
-  int gigaHashesPerSecond;
+  int txInMemPool;
   int uptime;
   String version;
   String chain;
@@ -19,7 +19,7 @@ class BitcoinData {
       required this.verificationProgress,
       required this.connectionsIncoming,
       required this.connectionsOutgoing,
-      required this.gigaHashesPerSecond,
+      required this.txInMemPool,
       required this.uptime,
       required this.version,
       required this.chain});
@@ -33,7 +33,7 @@ class BitcoinData {
         verificationProgress: json["verificationProgress"] as double,
         connectionsIncoming: json["connectionsIncoming"] as int,
         connectionsOutgoing: json["connectionsOutgoing"] as int,
-        gigaHashesPerSecond: json["gigaHashesPerSecond"] as int,
+        txInMemPool: json["txInMemPool"] as int,
         uptime: json["uptime"] as int,
         version: json["version"] as String,
         chain: json["chain"] as String);

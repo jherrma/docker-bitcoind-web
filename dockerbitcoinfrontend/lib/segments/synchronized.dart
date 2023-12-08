@@ -22,7 +22,7 @@ class Syncronized extends StatelessWidget {
               "${(verificationProgress * 100).toStringAsFixed(1)}%",
               style: TextStyle(
                 fontSize: textSize,
-                color: verificationProgress == 1.0
+                color: verificationProgress >= 0.99
                     ? Colors.green
                     : const Color.fromARGB(255, 242, 169, 0),
               ),

@@ -69,7 +69,6 @@ func (a *ApiController) GetCollectedInfo(c *fiber.Ctx) error {
 	}
 
 	sizeMega := 1000 * 1000
-	sizeGiga := sizeMega * 1000
 	sizeOnDiskInMb := int(blockChainInfo.SizeOnDisk / uint64(sizeMega))
 	blocks := blockChainInfo.Blocks
 
@@ -78,9 +77,9 @@ func (a *ApiController) GetCollectedInfo(c *fiber.Ctx) error {
 		return fmt.Errorf("could not get networkInfo due to %s", err.Error())
 	}
 
-	miningInfo, err := a.btcd.GetMiningInfo()
+	memPoolInfo, err := a.btcd.GetMemPoolInfo()
 	if err != nil {
-		return fmt.Errorf("could not get mining info due to %s", err.Error())
+		return fmt.Errorf("could not get mempoolInfo due to %s", err.Error())
 	}
 
 	latestBlockInfo, err := a.getLatestBlockInfo(blocks)
@@ -89,8 +88,6 @@ func (a *ApiController) GetCollectedInfo(c *fiber.Ctx) error {
 	}
 
 	secondsSinceLatestBlock := getSecondsSinceLatestBlock(latestBlockInfo)
-
-	gigaHashesPerSecond := uint64(miningInfo.NetworkHashPerSecond) / uint64(sizeGiga)
 
 	versionMajor := networkInfo.Version / 10000
 	versionMinor := (networkInfo.Version / 100) % 100
@@ -116,7 +113,7 @@ func (a *ApiController) GetCollectedInfo(c *fiber.Ctx) error {
 		"verificationProgress":    verificationProgress,
 		"connectionsIncoming":     networkInfo.ConnectionsIn,
 		"connectionsOutgoing":     networkInfo.ConnectionsOut,
-		"gigaHashesPerSecond":     gigaHashesPerSecond,
+		"txInMemPool":             memPoolInfo.Size,
 		"uptime":                  uptime,
 		"version":                 version,
 		"chain":                   blockChainInfo.Chain,

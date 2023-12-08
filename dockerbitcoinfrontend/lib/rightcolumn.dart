@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dockerbitcoinfrontend/models/bitcoindata.dart';
 import 'package:dockerbitcoinfrontend/segments/connections.dart';
-import 'package:dockerbitcoinfrontend/segments/network.dart';
+import 'package:dockerbitcoinfrontend/segments/txinmempool.dart';
 import 'package:dockerbitcoinfrontend/segments/about.dart';
 import 'package:dockerbitcoinfrontend/helperwidgets/cardelement.dart';
 
@@ -32,7 +32,7 @@ class RightColumn extends StatelessWidget {
           CardElement(
             height: heightSmall,
             child: MempoolSegment(
-              gigaHashesPerSecond: bitcoinData.gigaHashesPerSecond,
+              txInMemPool: bitcoinData.txInMemPool,
             ),
           ),
           CardElement(
