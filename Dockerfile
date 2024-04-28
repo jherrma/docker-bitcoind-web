@@ -1,5 +1,5 @@
 ARG DEBIAN_VERSION=12-slim
-ARG GO_VERSION=1.21
+ARG GO_VERSION=1.22
 
 FROM debian:${DEBIAN_VERSION} AS builder
 
@@ -13,7 +13,7 @@ ENV ARCH=aarch64
 FROM builder_${TARGETARCH} AS build
 
 ARG BITCOIN_CORE_SIGNATURE=71A3B16735405025D447E8F274810B012346C9A6
-ARG VERSION=26.0
+ARG VERSION=27.0
 
 RUN apt update \
     && apt install -y --no-install-recommends \
@@ -39,7 +39,7 @@ FROM golang:${GO_VERSION} AS server
 WORKDIR /bitcoin
 COPY docker-bitcoin-server .
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -o docker-bitcoin-webserver
+RUN CGO_ENABLED=0 GOOS=linux go build -o docker-bitcoin-server
 
 
 FROM debian:${DEBIAN_VERSION} AS final
@@ -64,9 +64,9 @@ RUN apt update \
 && apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 && ln -sv /opt/bitcoin/bin/* /usr/local/bin
 
-COPY --from=server /bitcoin/docker-bitcoin-webserver /bitcoin/docker-bitcoin-webserver
+COPY --from=server /bitcoin/docker-bitcoin-server /bitcoin/docker-bitcoin-server
 
 # Frontend needs to be compiled locally before running docker build
 COPY dockerbitcoinfrontend/build/web /bitcoin/frontend
 
-ENTRYPOINT ["/bitcoin/docker-bitcoin-webserver"]
+ENTRYPOINT ["/bitcoin/docker-bitcoin-server"]
